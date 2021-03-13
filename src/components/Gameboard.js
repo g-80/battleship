@@ -1,33 +1,26 @@
 import React from "react";
-import playersData from "../game_logic/playersData";
 import styles from "./styles/gameboard.module.css";
 
 function Gameboard(props) {
   // Gameboard object
-  const humanGameboard = playersData.human.gameboard;
+  const gameboardClass = props.gameboardClass;
   return (
     <>
-      <div className={styles.gameboard}>
-        {humanGameboard.board.map((cell, index) => (
+      <div className={styles[gameboardClass]}>
+        {props.board.map((cell, index) => (
           <div
-            className={styles.cell}
+            className={`${cell.hasShip ? styles.hasShip : styles.cell} ${
+              props.hovered.includes(index) ? styles.allowed : styles.notAllowed
+            }`}
             key={`cell-${index}`}
-            onClick={() => {
-              props.onClick(index);
-            }}
+            onClick={props.onClickHandler}
             onMouseEnter={() => {
-              props.onMouseEnter(index);
+              props.mouseEnterHandler(index);
             }}
+            onMouseLeave={props.mouseLeaveHandler}
           ></div>
         ))}
       </div>
-      {/* <div className={styles.gameboard}>
-        {humanGameboard.opponentBoard().map((cell, index) => (
-          <div className={styles.cell} key={`opponent-cell-${index}`}>
-            {cell}
-          </div>
-        ))}
-      </div> */}
     </>
   );
 }

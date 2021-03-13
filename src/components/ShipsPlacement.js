@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { GameContext } from "../GameContext";
 import Ship from "../factories/Ship";
 import { shipsTypes, createAIShipLocation } from "../game_logic/shipsPlacement";
-import styles from "./styles/ShipsPlacement.module.css";
+import Gameboard from "./Gameboard";
 
 function ShipsPlacement() {
   const [currentShipIndex, setCurrentShipIndex] = useState(0);
@@ -115,21 +115,14 @@ function ShipsPlacement() {
           Y
         </button>
       </div>
-      <div className={styles.gameboard}>
-        {players.human.gameboard.board.map((cell, index) => (
-          <div
-            className={`${cell.hasShip ? styles.hasShip : styles.cell} ${
-              hovered.includes(index) ? styles.allowed : styles.notAllowed
-            }`}
-            key={`cell-${index}`}
-            onClick={onClickHandler}
-            onMouseEnter={() => {
-              mouseEnterHandler(index);
-            }}
-            onMouseLeave={mouseLeaveHandler}
-          ></div>
-        ))}
-      </div>
+      <Gameboard
+        gameboardClass="player-gameboard"
+        board={gameboard.board}
+        hovered={hovered}
+        onClickHandler={onClickHandler}
+        mouseEnterHandler={mouseEnterHandler}
+        mouseLeaveHandler={mouseLeaveHandler}
+      />
       <ul>
         {shipsToPlace.map((ship, index) => {
           return <li key={`toPlace${index}`}>{ship.name}</li>;
