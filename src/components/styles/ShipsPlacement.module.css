@@ -1,0 +1,26 @@
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(10, 40px);
+  border: 1px solid black;
+  gap: 3px;
+}
+
+.cell {
+  cursor: pointer;
+  background-color: rgb(64, 91, 122);
+  height: 40px;
+  width: 40px;
+}
+
+.allowed {
+  background-color: rgb(195, 213, 233);
+}
+
+.notAllowed:hover {
+  background-color: rgb(167, 101, 105);
+  cursor: not-allowed;
+}
+
+.hasShip {
+  background-color: rgb(175, 187, 201);
+}
