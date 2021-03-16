@@ -10,26 +10,29 @@ const ComputerAI = function () {
       return array[index];
     },
 
-    updateAvailableShots() {
-      const opponentBoard = this.opponentGameboard.opponentBoard();
+    updateAvailableShots(gameboard) {
+      const opponentBoard = gameboard.opponentBoard();
+      const newAvailableShots = [];
+      const newShotsHit = [];
       opponentBoard.forEach((loc, index) => {
         if (loc === "empty") {
-          this.availableShots.push(index);
+          newAvailableShots.push(index);
         } else if (loc === "hit") {
-          if (this.sunkShips.includes(index)) return;
-          else this.shotsHit.push(index);
+          if (this.sunkShipsCells.includes(index)) return;
+          else newShotsHit.push(index);
         }
+        this.availableShots = newAvailableShots;
+        this.shotsHit = newShotsHit;
       });
     },
 
     // filter out sunk ships
-    filterShotsHit() {
+    filterShotsHit(ships) {
       this.shotsHit = this.shotsHit.filter((cell) => {
-        const hitShip = this.opponentShips.find((ship) =>
-          ship.position.includes(cell)
-        );
-        if (hitShip.isSunk()) this.sunkShipsCells.push(hitShip);
-        else return true;
+        const hitShip = ships.find((ship) => ship.position.includes(cell));
+        if (hitShip.isSunk()) {
+          this.sunkShipsCells.push(cell);
+        } else return true;
       });
     },
 

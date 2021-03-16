@@ -14,17 +14,13 @@ const Gameboard = function () {
       }
       return locationArray;
     },
+
     updateCellsHaveShip(locationArray) {
       locationArray.forEach((cell) => {
         this.board[cell].hasShip = true;
       });
     },
-    receiveAttack(cell) {
-      this.board[cell].isShot = true;
-    },
-    isShipHit(cell) {
-      return this.board[cell].hasShip;
-    },
+
     checkCollisions(locationArray) {
       const collisions = [9, 19, 29, 39, 49, 59, 69, 79, 89, 99];
       if (locationArray.some((cell) => !this.board[cell])) {
@@ -46,10 +42,20 @@ const Gameboard = function () {
         return true;
       }
     },
+
+    receiveAttack(cell) {
+      this.board[cell].isShot = true;
+    },
+
+    isShipHit(cell) {
+      return this.board[cell].hasShip;
+    },
+
     areAllShipsSunk() {
       const shipsCells = this.board.filter((cell) => cell.hasShip);
       return shipsCells.every((cell) => cell.isShot);
     },
+
     // this returns a version of the game board that represents what the opponent is allowed to see
     opponentBoard() {
       return this.board.map((cell) => {

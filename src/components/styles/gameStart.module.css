@@ -1,0 +1,14 @@
+.flexContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10%;
+}
+
+.gameTitle{
+    cursor: default;
+    font-size: 4rem;
+    color: rgb(223, 232, 241);
+}
+

@@ -2,6 +2,8 @@ import React, { useContext } from "react";
 import { GameContext } from "../GameContext";
 import GameStart from "./GameStart";
 import ShipsPlacement from "./ShipsPlacement";
+import Battle from "./Battle";
+import GameOver from "./Gameover";
 function ComponentsRenderer() {
   // renders components depending on the stage of the game
   const { state } = useContext(GameContext);
@@ -14,17 +16,18 @@ function ComponentsRenderer() {
       component = <ShipsPlacement />;
       break;
     case "battle":
+      component = <Battle />;
       break;
     case "game_over":
+      component = <GameOver />;
       break;
     default:
       break;
   }
 
-  console.log(state.players);
   return (
     <>
-      <p>{state.message}</p>
+      {state.stage !== "init" ? <p className="msg">{state.message}</p> : ""}
       {component}
     </>
   );

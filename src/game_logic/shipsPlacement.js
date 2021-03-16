@@ -1,3 +1,6 @@
+import Ship from "../factories/Ship";
+
+// the dispatch parameter here is the dispatch function from the reducer
 const shipsTypes = [
   { name: "Carrier", length: 5 },
   { name: "Battleship", length: 4 },
@@ -5,6 +8,24 @@ const shipsTypes = [
   { name: "Submarine", length: 3 },
   { name: "Patrol boat", length: 2 },
 ];
+
+const createShips = (array) => {
+  // create ships objects from an array of locations arrays
+  const shipsObjects = [];
+  shipsTypes.forEach((ship, index) => {
+    const location = array[index];
+    const newShip = Ship(ship.name, location);
+    shipsObjects.push(newShip);
+  });
+  return shipsObjects;
+};
+
+const setPlayerShips = (playerType, ships, dispatch) => {
+  dispatch({
+    type: "SET_PLAYER_SHIPS",
+    payload: { player: playerType, ships },
+  });
+};
 
 const createAIShipLocation = (gameboard, shipLength) => {
   // create ship location for AI player
@@ -30,4 +51,15 @@ const createAIShipLocation = (gameboard, shipLength) => {
   return locationArray;
 };
 
-export { shipsTypes, createAIShipLocation };
+const placeAIShips = (aiGameboard, dispatch) => {
+  const locationArrays = [];
+  shipsTypes.forEach((ship) => {
+    const location = createAIShipLocation(aiGameboard, ship.length);
+    aiGameboard.updateCellsHaveShip(location);
+    locationArrays.push(location);
+  });
+  const ships = createShips(locationArrays);
+  setPlayerShips("ai", ships, dispatch);
+};
+
+export { shipsTypes, createShips, setPlayerShips, placeAIShips };

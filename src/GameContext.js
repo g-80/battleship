@@ -3,14 +3,15 @@ import reducer from "./reducer";
 
 export const GameContext = createContext();
 
+export const initialState = {
+  players: {},
+  turn: "",
+  stage: "init",
+  message: "",
+  winner: "",
+};
+
 function GameContextProvider(props) {
-  const initialState = {
-    players: {},
-    turn: "",
-    stage: "init",
-    message: "",
-    winner: "",
-  };
   const [state, dispatch] = useReducer(reducer, initialState);
 
   return (

@@ -1,26 +1,29 @@
-.gameboard {
-  display: grid;
-  grid-template-columns: repeat(10, 40px);
-  border: 1px solid black;
-  gap: 3px;
+.axisContainer {
+  display: flex;
+  justify-content: center;
+  margin: 5% 0% 0%;
 }
 
-.cell {
+.axisBtn {
+  padding-bottom: 3px;
   cursor: pointer;
-  background-color: rgb(64, 91, 122);
-  height: 40px;
+  border: none;
+  background-color: rgb(213, 220, 233);
+  font-family: inherit;
+  font-size: inherit;
+  color: rgb(42, 55, 75);
+  margin-left: 25px;
   width: 40px;
+  height: 30px;
+}
+.axisBtn:hover {
+  background-color: rgb(232, 241, 252);
 }
 
-.allowed {
-  background-color: rgb(195, 213, 233);
+.list {
+  list-style: none;
 }
 
-.notAllowed:hover {
-  background-color: rgb(167, 101, 105);
-  cursor: not-allowed;
-}
-
-.hasShip {
-  background-color: rgb(175, 187, 201);
+.list li {
+  margin-bottom: 20%;
 }

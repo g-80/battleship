@@ -1,8 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
 import { GameContext } from "../GameContext";
-import Ship from "../factories/Ship";
-import { shipsTypes, createAIShipLocation } from "../game_logic/shipsPlacement";
+import {
+  shipsTypes,
+  createShips,
+  setPlayerShips,
+  placeAIShips,
+} from "../game_logic/shipsPlacement";
 import Gameboard from "./Gameboard";
+import styles from "./styles/shipsPlacement.module.css";
 
 function ShipsPlacement() {
   const [currentShipIndex, setCurrentShipIndex] = useState(0);
@@ -15,38 +20,12 @@ function ShipsPlacement() {
   const { human } = players;
   const { gameboard } = human;
 
-  const createShips = (array) => {
-    // create ships objects from an array of locations arrays
-    const shipsObjects = [];
-    shipsTypes.forEach((ship, index) => {
-      const location = array[index];
-      const newShip = Ship(ship.name, location);
-      shipsObjects.push(newShip);
-    });
-    return shipsObjects;
-  };
-
-  const setPlayerShips = (playerType, ships) => {
-    dispatch({
-      type: "SET_PLAYER_SHIPS",
-      payload: { player: playerType, ships },
-    });
-  };
-
-  const placeAIShips = () => {
-    const aiGameboard = players.ai.gameboard;
-    const locationArrays = [];
-    shipsTypes.forEach((ship) => {
-      const location = createAIShipLocation(aiGameboard, ship.length);
-      aiGameboard.updateCellsHaveShip(location);
-      locationArrays.push(location);
-    });
-    const ships = createShips(locationArrays);
-    setPlayerShips("ai", ships);
-  };
-
   useEffect(() => {
-    placeAIShips();
+    placeAIShips(players.ai.gameboard, dispatch);
+    dispatch({
+      type: "SET_MESSAGE",
+      payload: "Place your ships on the gameboard",
+    });
   }, []);
 
   const mouseEnterHandler = (index) => {
@@ -54,17 +33,23 @@ function ShipsPlacement() {
     const { length } = shipsTypes[currentShipIndex];
     const locationArray = gameboard.createLocationArray(index, length, axis);
     const collision = gameboard.checkCollisions(locationArray);
-    console.log(shipsToPlace);
-
     // change colour of cells based on collision
     if (collision) {
       setHovered(locationArray);
       if (currentShipIndex === 4)
+        // an ugly way to work around the one step delayed update of humanShipsLocations state
+        // this and the ones in the other handlers
         setHumanShipsLocations([...humanShipsLocations, locationArray]);
     } else setHovered([]);
   };
 
   const mouseLeaveHandler = () => {
+    if (currentShipIndex === 4) {
+      const updatedLocations = humanShipsLocations.filter(
+        (array) => array.length > 2
+      );
+      setHumanShipsLocations(updatedLocations);
+    }
     setHovered([]);
   };
 
@@ -73,13 +58,11 @@ function ShipsPlacement() {
     if (hovered.length) {
       gameboard.updateCellsHaveShip(hovered);
       if (currentShipIndex < 4)
-        // an ugly way to work around the one step delayed update of humanShipsLocations state
-        // this and the one in mouseEnterHandler
         setHumanShipsLocations([...humanShipsLocations, hovered]);
       if (currentShipIndex >= 4) {
         setHovered([]);
         const ships = createShips(humanShipsLocations);
-        setPlayerShips("human", ships);
+        setPlayerShips("human", ships, dispatch);
         dispatch({
           type: "SET_STAGE",
           payload: "battle",
@@ -97,38 +80,36 @@ function ShipsPlacement() {
   };
 
   return (
-    <>
-      <div>
+    <div>
+      <div className={styles.axisContainer}>
         <span>Axis</span>
         <button
           onClick={() => {
-            setAxis("x");
+            if (axis === "x") setAxis("y");
+            else setAxis("x");
           }}
+          className={styles.axisBtn}
         >
-          X
-        </button>
-        <button
-          onClick={() => {
-            setAxis("y");
-          }}
-        >
-          Y
+          {axis}
         </button>
       </div>
-      <Gameboard
-        gameboardClass="player-gameboard"
-        board={gameboard.board}
-        hovered={hovered}
-        onClickHandler={onClickHandler}
-        mouseEnterHandler={mouseEnterHandler}
-        mouseLeaveHandler={mouseLeaveHandler}
-      />
-      <ul>
-        {shipsToPlace.map((ship, index) => {
-          return <li key={`toPlace${index}`}>{ship.name}</li>;
-        })}
-      </ul>
-    </>
+      <div className="board-container" style={{ marginTop: "1%" }}>
+        <Gameboard
+          stage={state.stage}
+          owner="human"
+          board={gameboard.board}
+          allowed={hovered}
+          onClickHandler={onClickHandler}
+          mouseEnterHandler={mouseEnterHandler}
+          mouseLeaveHandler={mouseLeaveHandler}
+        />
+        <ul className={styles.list}>
+          {shipsToPlace.map((ship, index) => {
+            return <li key={`toPlace${index}`}>{ship.name}</li>;
+          })}
+        </ul>
+      </div>
+    </div>
   );
 }
 

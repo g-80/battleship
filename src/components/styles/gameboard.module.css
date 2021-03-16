@@ -1,20 +1,32 @@
-.player-gameboard {
-  display: grid;
-  grid-template-columns: repeat(10, 40px);
-  border: 1px solid black;
-  gap: 3px;
+:root {
+  --cell-size: 60px;
+  --allowed-colour: rgb(195, 213, 233);
 }
+
+.gameboard {
+  display: grid;
+  grid-template-columns: repeat(10, var(--cell-size));
+  grid-template-rows: repeat(10, var(--cell-size));
+  border: 3px solid rgb(24, 38, 59);
+  gap: 3px;
+  background-color: rgb(24, 38, 59);
+}
+
+.wml {
+  margin-left: 7em;
+}
+
 
 .cell {
   cursor: pointer;
   background-color: rgb(64, 91, 122);
-  height: 40px;
-  width: 40px;
 }
 
+
 .allowed {
-  background-color: rgb(195, 213, 233);
+  background-color: var(--allowed-colour);
 }
+
 
 .notAllowed:hover {
   background-color: rgb(167, 101, 105);
@@ -22,5 +34,20 @@
 }
 
 .hasShip {
-  background-color: rgb(175, 187, 201);
+  background-color: rgb(202, 202, 202);
+}
+
+.attackAllowed:hover {
+  background-color: var(--allowed-colour);
+}
+
+.attackMiss {
+  outline: 1px dashed rgb(255, 255, 255);
+  outline-offset: -10px;
+  background-color:rgb(92, 92, 92)
+}
+.attackHit{
+  outline: 3px solid rgb(255, 115, 115);
+  outline-offset: -1px;
+  background-color: rgb(226, 69, 69);
 }
