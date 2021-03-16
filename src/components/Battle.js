@@ -13,6 +13,7 @@ function Battle() {
   const updateHumanAllowed = () => {
     setHumanAllowed(() => {
       const board = ai.gameboard.opponentBoard();
+      // eslint-disable-next-line
       return board.map((cell, index) => {
         if (cell === "empty") return index;
       });
@@ -27,6 +28,7 @@ function Battle() {
       type: "SET_MESSAGE",
       payload: "It's your turn. Attack your opponent's ships",
     });
+    // eslint-disable-next-line
   }, []);
 
   useEffect(() => {
@@ -34,6 +36,7 @@ function Battle() {
     if (state.turn === "ai") {
       setTimeout(() => aiAttack(ai, human, dispatch), 750);
     }
+    // eslint-disable-next-line
   }, [state.turn]);
 
   const onClickHandler = () => {

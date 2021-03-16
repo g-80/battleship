@@ -1,8 +1,7 @@
-import React, { useState, useReducer } from "react";
+import React from "react";
 import "./App.css";
 import ComponentsRenderer from "./components/ComponentsRenderer";
 import GameContextProvider from "./GameContext";
-import reducer from "./reducer";
 
 function App() {
   return (

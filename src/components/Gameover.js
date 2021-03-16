@@ -11,6 +11,7 @@ function GameOver() {
     } else {
       dispatch({ type: "SET_MESSAGE", payload: "Computer AI wins" });
     }
+    // eslint-disable-next-line
   }, []);
 
   return (

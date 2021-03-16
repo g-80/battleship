@@ -28,6 +28,7 @@ const ComputerAI = function () {
 
     // filter out sunk ships
     filterShotsHit(ships) {
+      // eslint-disable-next-line
       this.shotsHit = this.shotsHit.filter((cell) => {
         const hitShip = ships.find((ship) => ship.position.includes(cell));
         if (hitShip.isSunk()) {
@@ -92,6 +93,7 @@ const ComputerAI = function () {
         hitCell + 10,
         hitCell - 10,
       ];
+      // eslint-disable-next-line
       const filteredPossibleShots = possibleShots.filter((cell) => {
         // only keep cells on that gameboard
         if (this.availableShots.includes(cell)) {

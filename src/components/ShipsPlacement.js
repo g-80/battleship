@@ -26,6 +26,7 @@ function ShipsPlacement() {
       type: "SET_MESSAGE",
       payload: "Place your ships on the gameboard",
     });
+    // eslint-disable-next-line
   }, []);
 
   const mouseEnterHandler = (index) => {
